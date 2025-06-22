@@ -1,14 +1,13 @@
 // Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyBjUSXbgC1D7zyf3_XvkizL-XgP_jBkFNY",
-    authDomain: "doan2-d8986.firebaseapp.com",
-    databaseURL: "https://doan2-d8986-default-rtdb.firebaseio.com/",
-    projectId: "doan2-d8986",
-    storageBucket: "doan2-d8986.firebasestorage.app",
-    messagingSenderId: "599715257661",
-    appId: "1:599715257661:web:2e207f74b9301b2ba2b954",
-    measurementId: "G-SVKWJBLX8K"
-  };
+  apiKey: "AIzaSyAmC-CHB-30UOaF4K7XFgTvaqnSZ0IJcnU",
+  authDomain: "iot-home-32eb4.firebaseapp.com",
+  databaseURL: "https://iot-home-32eb4-default-rtdb.firebaseio.com",
+  projectId: "iot-home-32eb4",
+  storageBucket: "iot-home-32eb4.firebasestorage.app",
+  messagingSenderId: "393820228512",
+  appId: "1:393820228512:web:5033bd6f87b1f1165f32c5"
+};
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
