@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoT HOME - Hệ thống điều khiển thông minh</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-glass">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <div class="brand-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+                <span class="brand-text">IoT HOME</span>
+            </a>
+            <div class="navbar-text">
+                <div class="status-group">
+                    <div class="status-item">
+                        <i class="fas fa-clock"></i>
+                        <span id="currentTime"></span>
+                    </div>
+                    <div class="status-badge" id="connectionStatus">
+                        <i class="fas fa-wifi"></i>
+                        <span>Đã kết nối</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1>Bảng điều khiển</h1>
+                    <p class="text-muted">Quản lý thiết bị thông minh của bạn</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="control-mode">
+                        <label class="form-check form-switch">
+                            <div class="mode-label">
+                                <div class="mode-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <span id="modeText">Chế độ tự động</span>
+                            </div>
+                            <input class="form-check-input" type="checkbox" id="modeToggle">
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Device Grid -->
+        <div class="device-grid">
+            <!-- Relay 1 Card -->
+            <div class="device-card">
+                <div class="device-header">
+                    <div class="device-info">
+                        <div class="device-icon-wrapper">
+                            <i class="fas fa-plug device-icon"></i>
+                        </div>
+                        <div class="device-details">
+                            <h3>Thiết bị 1</h3>
+                            <span class="device-status" id="relay1Status">Đang tắt</span>
+                            <small class="device-mode" id="relay1Mode">Chế độ: Tự động</small>
+                        </div>
+                    </div>
+                    <div class="device-controls">
+                        <button class="btn btn-mode" id="relay1ModeToggle" onclick="toggleRelayMode(1)">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                        <button class="btn btn-toggle" id="relay1Toggle" data-relay="1">
+                            <div class="toggle-content">
+                                <i class="fas fa-power-off"></i>
+                                <span>TẮT</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+                <div class="device-body">
+                    <div class="schedule-header">
+                        <div class="schedule-title">
+                            <i class="fas fa-clock"></i>
+                            <h4>Lịch trình</h4>
+                        </div>
+                        <button class="btn-add-schedule" onclick="openScheduleModal(1)">
+                            <i class="fas fa-plus"></i>
+                            <span>Thêm thời gian bật tắt</span>
+                        </button>
+                    </div>
+                    <div id="relay1Schedules" class="schedule-list"></div>
+                </div>
+            </div>
+
+            <!-- Relay 2 Card -->
+            <div class="device-card">
+                <div class="device-header">
+                    <div class="device-info">
+                        <div class="device-icon-wrapper">
+                            <i class="fas fa-plug device-icon"></i>
+                        </div>
+                        <div class="device-details">
+                            <h3>Thiết bị 2</h3>
+                            <span class="device-status" id="relay2Status">Đang tắt</span>
+                            <small class="device-mode" id="relay2Mode">Chế độ: Tự động</small>
+                        </div>
+                    </div>
+                    <div class="device-controls">
+                        <button class="btn btn-mode" id="relay2ModeToggle" onclick="toggleRelayMode(2)">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                        <button class="btn btn-toggle" id="relay2Toggle" data-relay="2">
+                            <div class="toggle-content">
+                                <i class="fas fa-power-off"></i>
+                                <span>TẮT</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+                <div class="device-body">
+                    <div class="schedule-header">
+                        <div class="schedule-title">
+                            <i class="fas fa-clock"></i>
+                            <h4>Lịch trình</h4>
+                        </div>
+                        <button class="btn-add-schedule" onclick="openScheduleModal(2)">
+                            <i class="fas fa-plus"></i>
+                            <span>Thêm thời gian bật tắt</span>
+                        </button>
+                    </div>
+                    <div id="relay2Schedules" class="schedule-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Schedule Modal -->
+    <div class="modal fade" id="scheduleModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <i class="fas fa-clock"></i>
+                        <h5>Thêm lịch trình mới</h5>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="scheduleForm">
+                        <input type="hidden" id="scheduleRelay" value="1">
+                        <div class="time-setting">
+                            <div class="time-label">
+                                <i class="fas fa-sun"></i>
+                                <span>Thời gian BẬT</span>
+                            </div>
+                            <div class="time-inputs">
+                                <div class="time-field">
+                                    <input type="number" class="form-control" id="onHour" min="0" max="23" placeholder="00">
+                                    <span class="time-unit">Giờ</span>
+                                </div>
+                                <div class="time-separator">:</div>
+                                <div class="time-field">
+                                    <input type="number" class="form-control" id="onMinute" min="0" max="59" placeholder="00">
+                                    <span class="time-unit">Phút</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="time-setting">
+                            <div class="time-label">
+                                <i class="fas fa-moon"></i>
+                                <span>Thời gian TẮT</span>
+                            </div>
+                            <div class="time-inputs">
+                                <div class="time-field">
+                                    <input type="number" class="form-control" id="offHour" min="0" max="23" placeholder="00">
+                                    <span class="time-unit">Giờ</span>
+                                </div>
+                                <div class="time-separator">:</div>
+                                <div class="time-field">
+                                    <input type="number" class="form-control" id="offMinute" min="0" max="59" placeholder="00">
+                                    <span class="time-unit">Phút</span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times"></i>
+                        <span>Hủy</span>
+                    </button>
+                    <button type="button" class="btn btn-primary" id="saveSchedule">
+                        <i class="fas fa-save"></i>
+                        <span>Lưu lịch trình</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-sun"></i>
+    </button>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 
