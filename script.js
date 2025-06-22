@@ -281,51 +281,33 @@ function updateGlobalModeToggle() {
     });
 }
 
-// Initialize system data structure with your exact JSON structure
+// Initialize system data structure - only basic structure, no preset schedules
 function initializeSystemData() {
-    const defaultData = {
-        relay1_manual: 0,
-        relay2_manual: 1,
-        relay1: 0,
-        relay2: 1,
-        schedules: {
-            relay1: [
-                {
-                    enabled: 1,
-                    on_h: 6,
-                    on_m: 0,
-                    off_h: 18,
-                    off_m: 30
+    // Check if data exists first
+    database.ref().once('value', (snapshot) => {
+        if (!snapshot.exists()) {
+            // Only create basic structure if nothing exists
+            const basicData = {
+                relay1_manual: 0,
+                relay2_manual: 0,
+                relay1: 0,
+                relay2: 0,
+                schedules: {
+                    relay1: [],
+                    relay2: []
                 },
-                {
-                    enabled: 1,
-                    on_h: 20,
-                    on_m: 0,
-                    off_h: 22,
-                    off_m: 0
+                status: {
+                    relay1: 0,
+                    relay2: 0,
+                    relay1_mode: "auto",
+                    relay2_mode: "auto",
+                    time: "00:00:00"
                 }
-            ],
-            relay2: [
-                {
-                    enabled: 1,
-                    on_h: 8,
-                    on_m: 0,
-                    off_h: 17,
-                    off_m: 0
-                }
-            ]
-        },
-        status: {
-            relay1: 0,
-            relay2: 1,
-            relay1_mode: "auto",
-            relay2_mode: "manual",
-            time: "14:30:25"
+            };
+            
+            database.ref().set(basicData);
         }
-    };
-    
-    // Initialize with your exact data structure
-    database.ref().set(defaultData);
+    });
 }
 
 // Initialize application
